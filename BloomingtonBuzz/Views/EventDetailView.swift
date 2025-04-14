@@ -147,4 +147,20 @@ struct EventDetailView: View {
         mapItem.name = event.eventTitle
         mapItem.openInMaps(launchOptions: [MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeDriving])
     }
+}
+
+#Preview {
+    // Create a sample event for testing
+    let sampleEvent = Event(
+        title: "Guest Lecture: The Future of AI",
+        description: "Join us for this exciting event featuring experts in the field of artificial intelligence. Learn about the latest developments and future trends.",
+        startTime: Date(),
+        endTime: Date().addingTimeInterval(3600),
+        location: "Luddy Hall",
+        latitude: 39.172231,
+        longitude: -86.523005,
+        eventType: .academic
+    )
+    
+    return EventDetailView(event: sampleEvent)
 } 

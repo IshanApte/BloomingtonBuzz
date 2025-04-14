@@ -85,4 +85,14 @@ struct FilterView: View {
             return "\(Int(meters)) m"
         }
     }
+}
+
+#Preview {
+    @State var selectedTypes = Set<EventType>(EventType.allCases)
+    @State var radius: Double = 2000
+    
+    return FilterView(
+        selectedTypes: .constant(selectedTypes), 
+        radiusFilter: .constant(radius)
+    )
 } 

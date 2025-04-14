@@ -299,4 +299,5 @@ struct EventRow: View {
 
 #Preview {
     ContentView()
+        .environmentObject(LocationManager())
 }

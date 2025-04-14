@@ -258,4 +258,25 @@ struct MapView: UIViewRepresentable {
             parent.onEventSelected(event)
         }
     }
+}
+
+#Preview {
+    // Create a sample event for testing
+    let sampleEvent = Event(
+        title: "Sample Event",
+        description: "This is a sample event for preview",
+        startTime: Date(),
+        endTime: Date().addingTimeInterval(3600),
+        location: "Sample Hall",
+        latitude: 39.168804,
+        longitude: -86.523819,
+        eventType: .academic
+    )
+    
+    return MapView(
+        locationManager: LocationManager(),
+        events: [sampleEvent],
+        onEventSelected: { _ in },
+        radiusFilter: 2000
+    )
 } 
