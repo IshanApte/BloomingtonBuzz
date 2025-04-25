@@ -66,3 +66,14 @@ BloomingtonBuzz follows a standard SwiftUI architecture:
 
 - Indiana University for event information
 - [Add any other acknowledgements or third-party libraries used]
+
+## Contributors
+
+- Ishan Apte - Lead Developer
+
+## Contact
+
+For any questions, suggestions, or feedback, please feel free to:
+- Open an issue on GitHub
+- Email: [Add your email address]
+- Connect on LinkedIn: [Add your LinkedIn profile]
