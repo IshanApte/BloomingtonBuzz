@@ -74,6 +74,4 @@ BloomingtonBuzz follows a standard SwiftUI architecture:
 ## Contact
 
 For any questions, suggestions, or feedback, please feel free to:
-- Open an issue on GitHub
-- Email: [Add your email address]
-- Connect on LinkedIn: [Add your LinkedIn profile]
+- Email: ishan.apte01@gmail.com
