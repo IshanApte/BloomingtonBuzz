@@ -1,7 +1,8 @@
 import SwiftUI
 
 struct MainView: View {
-    @EnvironmentObject private var locationManager: LocationManager
+    @EnvironmentObject var locationManager: LocationManager
+    @EnvironmentObject var eventService: EventService
     @StateObject private var storageManager = AppStorageManager.shared
     @AppStorage("isOnboardingComplete") private var isOnboardingComplete: Bool = false
     
@@ -9,6 +10,7 @@ struct MainView: View {
         if isOnboardingComplete {
             ContentView()
                 .environmentObject(locationManager)
+                .environmentObject(eventService)
                 .onAppear {
                     // Record app opened for analytics
                     storageManager.recordAppOpened()

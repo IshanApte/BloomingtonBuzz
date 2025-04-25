@@ -181,7 +181,6 @@ struct MapView: UIViewRepresentable {
         func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
             // For user location, return nil to use the default blue dot
             if annotation is MKUserLocation {
-                // Return nil to use the default blue dot
                 return nil
             }
             
@@ -263,6 +262,7 @@ struct MapView: UIViewRepresentable {
 #Preview {
     // Create a sample event for testing
     let sampleEvent = Event(
+        eventId: 0,
         title: "Sample Event",
         description: "This is a sample event for preview",
         startTime: Date(),

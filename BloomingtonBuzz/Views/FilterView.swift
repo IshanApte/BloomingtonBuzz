@@ -1,98 +1,65 @@
 import SwiftUI
 
 struct FilterView: View {
-    @Binding var selectedTypes: Set<EventType>
-    @Binding var radiusFilter: Double
-    @Environment(\.dismiss) private var dismiss
+    @Environment(\.dismiss) var dismiss
+    @Binding var selectedTags: Set<String>
     
-    private let radiusOptions: [Double] = [500, 1000, 2000, 5000] // In meters
+    private let iuRed = Color(red: 152/255, green: 0/255, blue: 0/255)
+    private let iuRedLight = Color(red: 179/255, green: 27/255, blue: 27/255)
+    private let iuWhite = Color.white
+    
+    // Define available tags
+    private let availableTags = [
+        "Free Food",
+        "Indoor",
+        "Outdoor",
+        "Community Engagement",
+        "Welcome Week",
+        "Admissions"
+    ]
     
     var body: some View {
-        NavigationStack {
-            Form {
-                Section(header: Text("Event Type")) {
-                    ForEach(EventType.allCases, id: \.self) { type in
-                        Button(action: {
-                            toggleEventType(type)
-                        }) {
+        NavigationView {
+            List {
+                Section(header: Text("Event Tags")) {
+                    ForEach(availableTags, id: \.self) { tag in
                             HStack {
-                                Image(systemName: type.icon)
-                                    .foregroundColor(type.color)
-                                
-                                Text(type.rawValue)
-                                
+                                Text(tag)
                                 Spacer()
-                                
-                                if selectedTypes.contains(type) {
+                                if selectedTags.contains(tag) {
                                     Image(systemName: "checkmark")
-                                        .foregroundColor(.accentColor)
-                                }
+                                    .foregroundColor(iuRed)
                             }
                         }
-                        .foregroundColor(.primary)
-                    }
-                    
-                    Button("Select All", role: selectedTypes.count == EventType.allCases.count ? .destructive : .none) {
-                        if selectedTypes.count == EventType.allCases.count {
-                            selectedTypes.removeAll()
-                        } else {
-                            selectedTypes = Set<EventType>(EventType.allCases)
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            if selectedTags.contains(tag) {
+                                selectedTags.remove(tag)
+                            } else {
+                                selectedTags.insert(tag)
                         }
                     }
-                }
-                
-                Section(header: Text("Radius")) {
-                    Picker("Show events within", selection: $radiusFilter) {
-                        ForEach(radiusOptions, id: \.self) { radius in
-                            Text(formatDistance(radius)).tag(radius)
-                        }
                     }
-                    .pickerStyle(.segmented)
                 }
             }
-            .navigationTitle("Filter Events")
+            .navigationTitle("Filters")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button("Reset") {
+                        selectedTags.removeAll()
+                    }
+                }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Done") {
                         dismiss()
                     }
                 }
-                
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Reset") {
-                        selectedTypes = Set<EventType>(EventType.allCases)
-                        radiusFilter = 2000 // Default to 2km
-                    }
-                }
             }
-        }
-    }
-    
-    private func toggleEventType(_ type: EventType) {
-        if selectedTypes.contains(type) {
-            selectedTypes.remove(type)
-        } else {
-            selectedTypes.insert(type)
-        }
-    }
-    
-    private func formatDistance(_ meters: Double) -> String {
-        if meters >= 1000 {
-            let kilometers = meters / 1000
-            return "\(Int(kilometers)) km"
-        } else {
-            return "\(Int(meters)) m"
         }
     }
 }
 
 #Preview {
-    @State var selectedTypes = Set<EventType>(EventType.allCases)
-    @State var radius: Double = 2000
-    
-    return FilterView(
-        selectedTypes: .constant(selectedTypes), 
-        radiusFilter: .constant(radius)
-    )
+    FilterView(selectedTags: .constant(Set<String>()))
 } 

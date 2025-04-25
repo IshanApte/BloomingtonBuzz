@@ -13,6 +13,7 @@ struct BloomingtonBuzzApp: App {
     // Initialize managers
     @StateObject private var locationManager = LocationManager()
     @StateObject private var storageManager = AppStorageManager.shared
+    @StateObject private var eventService = EventService()
     
     init() {
         print("📱 App initializing...")
@@ -38,6 +39,7 @@ struct BloomingtonBuzzApp: App {
             MainView()
                 .environmentObject(locationManager)
                 .environmentObject(storageManager)
+                .environmentObject(eventService)
                 .onAppear {
                     // Record app launch
                     storageManager.recordAppOpened()

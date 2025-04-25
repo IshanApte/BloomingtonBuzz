@@ -33,6 +33,7 @@ enum EventType: String, Codable, CaseIterable {
 
 class Event: NSObject, Identifiable, Codable, MKAnnotation {
     let id: UUID
+    let eventId: Int // LiveWhale event ID for matching with JSON API
     let eventTitle: String
     let eventDescription: String
     let startTime: Date
@@ -41,10 +42,15 @@ class Event: NSObject, Identifiable, Codable, MKAnnotation {
     let coordinates: CLLocationCoordinate2D
     let eventType: EventType
     let url: URL?
+    let isAllDay: Bool
+    let hasValidTimes: Bool  // New property to track if we have valid time data
+    let tags: [String]  // Add this property
     
-    init(id: UUID = UUID(), title: String, description: String, startTime: Date, endTime: Date, 
-         location: String, latitude: Double, longitude: Double, eventType: EventType, url: URL? = nil) {
+    init(id: UUID = UUID(), eventId: Int, title: String, description: String, startTime: Date, endTime: Date, 
+         location: String, latitude: Double, longitude: Double, eventType: EventType, url: URL? = nil, 
+         isAllDay: Bool = false, hasValidTimes: Bool = true, tags: [String] = []) {
         self.id = id
+        self.eventId = eventId
         self.eventTitle = title
         self.eventDescription = description
         self.startTime = startTime
@@ -53,6 +59,9 @@ class Event: NSObject, Identifiable, Codable, MKAnnotation {
         self.coordinates = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
         self.eventType = eventType
         self.url = url
+        self.isAllDay = isAllDay
+        self.hasValidTimes = hasValidTimes
+        self.tags = tags  // Initialize tags
         super.init()
     }
     
@@ -66,12 +75,40 @@ class Event: NSObject, Identifiable, Codable, MKAnnotation {
         return eventTitle
     }
     
-    // Optional subtitle for annotation callout
+    // Updated subtitle for annotation callout
     var subtitle: String? {
+        if isAllDay {
+            return "All Day"
+        }
+        
+        if !hasValidTimes {
+            return "Check Website"
+        }
+        
         let formatter = DateFormatter()
-        formatter.dateStyle = .none
         formatter.timeStyle = .short
-        return "\(formatter.string(from: startTime)) - \(eventType.rawValue)"
+        formatter.dateStyle = .none
+        let start = formatter.string(from: startTime)
+        let end = formatter.string(from: endTime)
+        return "\(start) – \(end)"
+    }
+    
+    // New method to get formatted time for detail view
+    func formattedTimeString() -> String {
+        if isAllDay {
+            return "All Day"
+        }
+        
+        if !hasValidTimes {
+            return "Check Website for Times"
+        }
+        
+        let formatter = DateFormatter()
+        formatter.timeStyle = .short
+        formatter.dateStyle = .medium
+        let start = formatter.string(from: startTime)
+        let end = formatter.string(from: endTime)
+        return "\(start) – \(end)"
     }
 }
 

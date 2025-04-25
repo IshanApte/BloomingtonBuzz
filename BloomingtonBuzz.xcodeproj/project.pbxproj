@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		D913865B2DA9DE36009A9465 /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = D913865A2DA9DE36009A9465 /* SwiftSoup */; };
+		D9D7F59A2DB82E5200A67E20 /* FeedKit in Frameworks */ = {isa = PBXBuildFile; productRef = D9D7F5992DB82E5200A67E20 /* FeedKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,6 +58,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D913865B2DA9DE36009A9465 /* SwiftSoup in Frameworks */,
+				D9D7F59A2DB82E5200A67E20 /* FeedKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -126,6 +128,7 @@
 			name = BloomingtonBuzz;
 			packageProductDependencies = (
 				D913865A2DA9DE36009A9465 /* SwiftSoup */,
+				D9D7F5992DB82E5200A67E20 /* FeedKit */,
 			);
 			productName = BloomingtonBuzz;
 			productReference = D99026B82DA9CD0400FC79BF /* BloomingtonBuzz.app */;
@@ -211,6 +214,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				D93F32392DA9DD0800BC1500 /* XCRemoteSwiftPackageReference "SwiftSoup" */,
+				D9D7F5982DB82DE200A67E20 /* XCRemoteSwiftPackageReference "FeedKit" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = D99026B92DA9CD0400FC79BF /* Products */;
@@ -589,6 +593,14 @@
 				minimumVersion = 2.8.7;
 			};
 		};
+		D9D7F5982DB82DE200A67E20 /* XCRemoteSwiftPackageReference "FeedKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/nmdias/FeedKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.1.2;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -596,6 +608,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = D93F32392DA9DD0800BC1500 /* XCRemoteSwiftPackageReference "SwiftSoup" */;
 			productName = SwiftSoup;
+		};
+		D9D7F5992DB82E5200A67E20 /* FeedKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D9D7F5982DB82DE200A67E20 /* XCRemoteSwiftPackageReference "FeedKit" */;
+			productName = FeedKit;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

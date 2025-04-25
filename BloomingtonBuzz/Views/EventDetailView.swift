@@ -6,7 +6,15 @@ struct EventDetailView: View {
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
-        ScrollView(.vertical) {
+        // Format the event time string once
+        let formatter = DateFormatter()
+        formatter.timeStyle = .short
+        formatter.dateStyle = .none
+        let start = formatter.string(from: event.startTime)
+        let end = formatter.string(from: event.endTime)
+        let timeString = event.isAllDay ? "All Day" : "\(start) – \(end)"
+        
+        return ScrollView(.vertical) {
             VStack(alignment: .leading, spacing: 16) {
                 // Event header
                 HStack {
@@ -34,19 +42,19 @@ struct EventDetailView: View {
                     .fontWeight(.bold)
                 
                 // Time information
-                VStack(alignment: .leading, spacing: 5) {
-                    Label {
-                        HStack {
-                            Text(formattedDate(event.startTime))
-                            Text("–")
-                            Text(formattedTime(event.endTime))
-                        }
-                    } icon: {
-                        Image(systemName: "clock")
-                    }
-                    .foregroundColor(.primary)
-                }
-                .padding(.vertical, 5)
+                // VStack(alignment: .leading, spacing: 5) {
+                //     Label {
+                //         HStack {
+                //             Text(formattedDate(event.startTime))
+                //             Text("–")
+                //             Text(formattedTime(event.endTime))
+                //         }
+                //     } icon: {
+                //         Image(systemName: "clock")
+                //     }
+                //     .foregroundColor(.primary)
+                // }
+                // .padding(.vertical, 5)
                 
                 // Location information
                 VStack(alignment: .leading, spacing: 5) {
@@ -65,6 +73,11 @@ struct EventDetailView: View {
                     .font(.headline)
                     .padding(.top, 5)
                 
+                // Show event time in description
+                Text(timeString)
+                    .font(.subheadline)
+                    .foregroundColor(.primary)
+                
                 Text(event.eventDescription)
                     .font(.body)
                     .foregroundColor(.secondary)
@@ -73,6 +86,12 @@ struct EventDetailView: View {
                 Text("Location")
                     .font(.headline)
                     .padding(.top, 10)
+                
+                // Show the address
+                Text(event.location)
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+                    .padding(.bottom, 4)
                 
                 Map(coordinateRegion: .constant(MKCoordinateRegion(
                     center: event.coordinates,
@@ -85,7 +104,7 @@ struct EventDetailView: View {
                 
                 // Directions button
                 Button(action: {
-                    openInMaps()
+                    openInGoogleMapsOrAppleMaps()
                 }) {
                     Label("Get Directions", systemImage: "arrow.triangle.turn.up.right.diamond")
                         .frame(maxWidth: .infinity)
@@ -95,17 +114,23 @@ struct EventDetailView: View {
                 .controlSize(.large)
                 .padding(.top, 10)
                 
-                // Link to website if available
-                if let url = event.url {
-                    Button(action: {
+                // Always show Visit Website button in green
+                Button(action: {
+                    if let url = event.url {
                         UIApplication.shared.open(url)
-                    }) {
-                        Label("View on Website", systemImage: "safari")
-                            .frame(maxWidth: .infinity)
+                    } else {
+                        // Show a message if no URL is available
+                        // In a real app, you might use an alert. For now, do nothing.
                     }
-                    .buttonStyle(.bordered)
-                    .controlSize(.large)
+                }) {
+                    Label("Visit Website", systemImage: "safari")
+                        .frame(maxWidth: .infinity)
                 }
+                .buttonStyle(.borderedProminent)
+                .tint(.green)
+                .controlSize(.large)
+                .padding(.top, 4)
+                .disabled(event.url == nil)
                 
                 Spacer()
             }
@@ -125,23 +150,31 @@ struct EventDetailView: View {
     }
     
     // Format date in a readable format
-    private func formattedDate(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        formatter.timeStyle = .short
-        return formatter.string(from: date)
-    }
+    // private func formattedDate(_ date: Date) -> String {
+    //     let formatter = DateFormatter()
+    //     formatter.dateStyle = .medium
+    //     formatter.timeStyle = .short
+    //     return formatter.string(from: date)
+    // }
     
     // Format time only
-    private func formattedTime(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .none
-        formatter.timeStyle = .short
-        return formatter.string(from: date)
-    }
+    // private func formattedTime(_ date: Date) -> String {
+    //     let formatter = DateFormatter()
+    //     formatter.dateStyle = .none
+    //     formatter.timeStyle = .short
+    //     return formatter.string(from: date)
+    // }
     
-    // Open the location in Apple Maps
-    private func openInMaps() {
+    // Open the location in Google Maps if available, otherwise Apple Maps
+    private func openInGoogleMapsOrAppleMaps() {
+        let destination = "\(event.coordinates.latitude),\(event.coordinates.longitude)"
+        if let url = URL(string: "comgooglemaps://"), UIApplication.shared.canOpenURL(url) {
+            if let googleMapsURL = URL(string: "comgooglemaps://?daddr=\(destination)&directionsmode=driving") {
+                UIApplication.shared.open(googleMapsURL)
+                return
+            }
+        }
+        // Fallback to Apple Maps
         let placemark = MKPlacemark(coordinate: event.coordinates)
         let mapItem = MKMapItem(placemark: placemark)
         mapItem.name = event.eventTitle
@@ -152,6 +185,7 @@ struct EventDetailView: View {
 #Preview {
     // Create a sample event for testing
     let sampleEvent = Event(
+        eventId: 0,
         title: "Guest Lecture: The Future of AI",
         description: "Join us for this exciting event featuring experts in the field of artificial intelligence. Learn about the latest developments and future trends.",
         startTime: Date(),

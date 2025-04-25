@@ -16,9 +16,9 @@ class LocationManager: NSObject, ObservableObject {
     // Default to IU Bloomington
     private let simulatedLocations: [String: CLLocation] = [
         "IU Bloomington": CLLocation(latitude: 39.168804, longitude: -86.523819),
-        "Sample Hall": CLLocation(latitude: 39.172231, longitude: -86.523005),
-        "Wells Library": CLLocation(latitude: 39.171822, longitude: -86.517893),
-        "Assembly Hall": CLLocation(latitude: 39.171234, longitude: -86.526318)
+        // "Sample Hall": CLLocation(latitude: 39.172231, longitude: -86.523005),
+        // "Wells Library": CLLocation(latitude: 39.171822, longitude: -86.517893),
+        // "Assembly Hall": CLLocation(latitude: 39.171234, longitude: -86.526318)
     ]
     
     private var selectedSimulationLocation = "IU Bloomington"
